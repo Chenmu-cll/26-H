@@ -1,0 +1,11 @@
+{
+    "cmake.configureOnOpen": false,
+    "cmake.useCMakePresets": "never",
+    "cmake.ignoreCMakeListsMissing": true,
+    "cmake.automaticReconfigure": false,
+    "cmake.buildBeforeRun": false,
+    "cmake.debugConfig": {
+        "type": "cortex-debug",
+        "request": "launch"
+    }
+}

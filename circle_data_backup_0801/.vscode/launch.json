@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "STM32F103 (OpenOCD + ST-Link)",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/MDK-ARM/circle_data/circle_data.axf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "openocd",
+            "serverpath": "C:\\STMCubemx\\openocd-v0.12.0-i686-w64-mingw32\\openocd-v0.12.0-i686-w64-mingw32\\bin\\openocd.exe",
+            "searchDir": [
+                "C:\\STMCubemx\\openocd-v0.12.0-i686-w64-mingw32\\openocd-v0.12.0-i686-w64-mingw32\\share\\openocd\\scripts"
+            ],
+            "configFiles": [
+                "interface/stlink.cfg",
+                "target/stm32f1x.cfg"
+            ],
+            "svdFile": "D:\\Keil5\\ARM\\PACK\\Keil\\STM32F1xx_DFP\\2.2.0\\SVD\\STM32F103xx.svd",
+            "gdbPath": "C:/Program Files (x86)/Arm GNU Toolchain arm-none-eabi/12.2 mpacbti-rel1/bin/arm-none-eabi-gdb.exe",
+            "liveWatch": {
+                "enabled": true,
+                "samplesPerSecond": 4
+            },
+            "overrideResetHalt": true,
+            "gdbTCPPort": 3333,
+            "showDevDebugOutput": "raw"
+        }
+    ]
+}
