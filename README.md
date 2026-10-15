@@ -21,7 +21,7 @@
                                           │ 安装于车上
                                           ▼
                                    ┌──────────────────┐
-                                   │ eightwaysxunjij  │
+                                   │ diancar_v13      │
                                    │ STM32F407 循迹小车│
                                    │ 8路灰度+编码器+IMU│
                                    └──────────────────┘
@@ -33,7 +33,7 @@
 26电赛项目/
 ├── Q_2026_JW/                  # K230 视觉检测端
 ├── circle_data_backup_0801/    # STM32F103 平衡控制端
-├── eightwaysxunjij/            # STM32F407 循迹小车主控
+├── diancar_v13/            # STM32F407 循迹小车主控
 └── README.md                   # 本文件
 ```
 
@@ -106,7 +106,7 @@ K230 → USART3 → DMA环形缓冲 → 解析 "origin:(偏移) v:(速度)"
 | `user/step_motor.c` | Emm V5.0 驱动器协议（位置模式 0xFD / 速度模式 0xF6） |
 | `user/step_motor_pid.c` | 备用 PID（当前未启用） |
 
-### 2.3 eightwaysxunjij — 循迹小车主控
+### 2.3 diancar_v13 — 循迹小车主控
 
 | 属性 | 说明 |
 |------|------|
@@ -190,7 +190,7 @@ origin:(<signed_offset>) v:(<signed_velocity>)\r\n
 |------|-----------|------|----------|
 | Q_2026_JW | PyCharm + CanMV | MicroPython | SD 卡烧录 |
 | circle_data_0801 | Keil MDK-ARM | C (HAL) | Keil 编译 |
-| eightwaysxunjij | Keil MDK / CMake+GCC | C (HAL) | Keil 或 Make |
+| diancar_v13 | Keil MDK / CMake+GCC | C (HAL) | Keil 或 Make |
 
 ## 六、作者
 
