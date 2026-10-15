@@ -1,0 +1,22 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "stlinkgdbtarget",
+            "request": "launch",
+            "name": "STM32Cube: Launch ST-Link GDB Server",
+            "origin": "snippet",
+            "cwd": "${workspaceFolder}",
+            "preBuild": "${command:st-stm32-ide-debug-launch.build}",
+            "runEntry": "main",
+            "imagesAndSymbols": [
+                {
+                    "imageFileName": "${workspaceFolder}/build/Debug/diancar_v13.elf"
+                }
+            ]
+        }
+    ]
+}

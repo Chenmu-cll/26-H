@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "STM32",
+            "includePath": [
+                "${workspaceFolder}/Core/Inc",
+                "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F4xx/Include",
+                "${workspaceFolder}/Drivers/CMSIS/Include",
+                "${workspaceFolder}/Drivers/STM32F4xx_HAL_Driver/Inc",
+                "${workspaceFolder}/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy",
+                "${workspaceFolder}/user",
+                "${workspaceFolder}/MDK-ARM/RTE/_diancar_v13"
+            ],
+            "defines": [
+                "STM32F407xx",
+                "USE_HAL_DRIVER",
+                "__CC_ARM"
+            ],
+            "compilerPath": "D:/Keil5/ARM/ARMCC/bin/armcc.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "armcc",
+            "compileCommands": "${workspaceFolder}/build/Debug/compile_commands.json"
+        }
+    ]
+}

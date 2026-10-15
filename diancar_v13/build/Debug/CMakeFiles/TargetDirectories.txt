@@ -1,0 +1,6 @@
+C:/Users/qwe15/Desktop/26/diancar_v13/build/Debug/CMakeFiles/diancar_v13.dir
+C:/Users/qwe15/Desktop/26/diancar_v13/build/Debug/CMakeFiles/edit_cache.dir
+C:/Users/qwe15/Desktop/26/diancar_v13/build/Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/qwe15/Desktop/26/diancar_v13/build/Debug/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir
+C:/Users/qwe15/Desktop/26/diancar_v13/build/Debug/cmake/stm32cubemx/CMakeFiles/edit_cache.dir
+C:/Users/qwe15/Desktop/26/diancar_v13/build/Debug/cmake/stm32cubemx/CMakeFiles/rebuild_cache.dir

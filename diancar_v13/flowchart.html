@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>车载平衡滚球运动控制系统 流程图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f0f2f5; font-family: 'Microsoft YaHei', sans-serif; display: flex; justify-content: center; padding: 30px; }
+  .canvas { background: #fff; padding: 50px 60px; border-radius: 8px; box-shadow: 0 2px 16px rgba(0,0,0,.1); }
+
+  /* ── 方块样式 ── */
+  .box { display: flex; align-items: center; justify-content: center; text-align: center;
+         border: 2px solid #333; border-radius: 6px; padding: 6px 10px;
+         font-size: 13px; line-height: 1.5; background: #fff; }
+
+  .box-power   { background: #fff3cd; border-color: #ffc107; }
+  .box-mcu     { background: #d1ecf1; border-color: #17a2b8; }
+  .box-sensor  { background: #d4edda; border-color: #28a745; }
+  .box-act     { background: #f8d7da; border-color: #dc3545; }
+  .box-display { background: #e2d5f1; border-color: #6f42c1; }
+  .box-comm    { background: #fff0d5; border-color: #fd7e14; }
+  .box-ctrl    { background: #d5e8f8; border-color: #0d6efd; }
+  .box-big     { font-size: 14px; font-weight: bold; }
+
+  /* ── 箭头 ── */
+  .arrow-down, .arrow-right, .arrow-left, .arrow-up { position: relative; }
+  .arrow-down::after  { content: '▼'; position: absolute; bottom: -16px; left: 50%; transform: translateX(-50%); font-size: 12px; color: #555; }
+  .arrow-right::after { content: '▶'; position: absolute; right: -16px; top: 50%; transform: translateY(-50%); font-size: 10px; color: #555; }
+  .arrow-left::after  { content: '◀'; position: absolute; left: -16px; top: 50%; transform: translateY(-50%); font-size: 10px; color: #555; }
+  .arrow-up::after    { content: '▲'; position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-size: 12px; color: #555; }
+
+  /* ── SVG 连线 ── */
+  svg.lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+  svg.lines line, svg.lines path { stroke: #555; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+  svg.lines line.dashed { stroke-dasharray: 6 3; }
+
+  .row { display: flex; align-items: center; gap: 20px; }
+  .col { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+
+  .gap20 { gap: 20px; }
+  .gap30 { gap: 30px; }
+  .gap40 { gap: 40px; }
+
+  .label { font-size: 12px; color: #666; text-align: center; }
+  .title { font-size: 20px; font-weight: bold; margin-bottom: 30px; text-align: center; }
+  .section-title { font-size: 15px; font-weight: bold; color: #333; border-bottom: 2px solid #333; padding-bottom: 4px; margin-bottom: 16px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <div class="title">车载平衡滚球运动控制系统 架构流程图</div>
+
+  <!-- ============ 第一层：供电 ============ -->
+  <div class="section-title">一、供电系统</div>
+  <div class="row" style="justify-content:center; gap:40px; margin-bottom:30px;">
+
+    <!-- 电池 -->
+    <div class="col gap20">
+      <div class="box box-power box-big" style="width:140px; height:55px;">🔋 航模电池<br><small>3S/4S LiPo<br>11.1V ~ 14.8V</small></div>
+    </div>
+
+    <!-- 两条降压路径 -->
+    <div class="col gap20" style="position:relative;">
+      <div style="position:absolute; top:-30px; left:50%; transform:translateX(-50%); font-size:13px; color:#555;">总电源</div>
+      <div class="row gap40">
+        <div class="col">
+          <div class="box box-power" style="width:120px;">12V → 5V<br>降压模块</div>
+          <div class="label">供: STM32F4<br>编码电机<br>红外模块<br>OLED</div>
+        </div>
+        <div class="col">
+          <div class="box box-power" style="width:120px;">12V → 3.3V<br>降压模块</div>
+          <div class="label">供: STM32C8T6<br>摄像头模块<br>步进电机驱动</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ 第二层：双MCU架构 ============ -->
+  <div class="section-title">二、双 MCU 控制架构</div>
+  <div class="grid2">
+
+    <!-- 左边：STM32F407 主控 -->
+    <div>
+      <div style="text-align:center; font-weight:bold; font-size:14px; margin-bottom:14px; color:#17a2b8;">
+        🟦 主控芯片 STM32F407ZGT6
+      </div>
+
+      <div class="col gap20">
+
+        <!-- 传感器输入 -->
+        <div style="width:100%;">
+          <div style="font-weight:bold; font-size:13px; margin-bottom:8px;">📥 输入</div>
+          <div class="row" style="justify-content:center; flex-wrap:wrap; gap:12px;">
+            <div class="box box-sensor" style="width:150px;">🟡 亚博智能<br>8路红外模块<br><small>灰度传感器</small></div>
+            <div class="box box-sensor" style="width:130px;">⚙️ 编码电机×2<br><small>速度反馈<br>(TIM2/TIM3)</small></div>
+            <div class="box box-sensor" style="width:100px;">🔘 按键<br><small>PG6<br>启停控制</small></div>
+          </div>
+        </div>
+
+        <!-- 控制核心 -->
+        <div class="box box-ctrl" style="width:90%;">
+          <b>PID 控制算法</b><br>
+          ┌ 循迹环 (PD): Kp=20, Kd=9<br>
+          │ 输入: 红外灰度 → Yaw_measure<br>
+          │ 输出: PWM_yaw 差速量<br>
+          ├ 速度环 (PID): Kp=1.5, Ki=0.4, Kd=0.3<br>
+          │ 输入: 编码器脉冲 + track_target<br>
+          │ 输出: 电机PWM补偿<br>
+          └ 融合: 45%速度环 + 55%循迹环<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S曲线加速 0→300 (1.5s)
+        </div>
+
+        <!-- 执行输出 -->
+        <div style="width:100%;">
+          <div style="font-weight:bold; font-size:13px; margin-bottom:8px;">📤 输出</div>
+          <div class="row" style="justify-content:center; gap:12px;">
+            <div class="box box-act" style="width:130px;">🔴 TB6612<br>电机驱动<br><small>PWM1/PWM2</small></div>
+            <div class="box box-act" style="width:100px;">🟣 OLED<br><small>I²C</small></div>
+          </div>
+        </div>
+
+        <!-- 显示内容 -->
+        <div class="box box-display" style="width:85%;">
+          <b>OLED 显示</b>: 灰度二进制 · 左右PWM · 赛道计时(s)
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 右边：STM32C8T6 副控 -->
+    <div>
+      <div style="text-align:center; font-weight:bold; font-size:14px; margin-bottom:14px; color:#fd7e14;">
+        🟧 副控芯片 STM32C8T6
+      </div>
+
+      <div class="col gap20">
+
+        <!-- 传感器输入 -->
+        <div style="width:100%;">
+          <div style="font-weight:bold; font-size:13px; margin-bottom:8px;">📥 输入</div>
+          <div class="row" style="justify-content:center;">
+            <div class="box box-sensor" style="width:140px;">📷 摄像头模块<br><small>球位置检测</small></div>
+          </div>
+        </div>
+
+        <!-- 控制核心 -->
+        <div class="box box-ctrl" style="width:85%;">
+          <b>球位置解算</b><br>
+          图像处理 → 球坐标(x,y)<br>
+          → 步进电机角度计算
+        </div>
+
+        <!-- 执行输出 -->
+        <div style="width:100%;">
+          <div style="font-weight:bold; font-size:13px; margin-bottom:8px;">📤 输出</div>
+          <div class="row" style="justify-content:center;">
+            <div class="box box-act" style="width:130px;">🟠 步进电机<br><small>平台倾角控制</small></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ 通信连线（双MCU之间） ============ -->
+  <div style="text-align:center; margin: 20px 0;">
+    <div class="box box-comm" style="display:inline-block; width:220px;">
+      🔗 UART 串口通信<br><small>F407 ←→ C8T6 数据交互</small>
+    </div>
+    <div class="label" style="margin-top:4px;">两MCU通过UART交换: 小车运动状态 / 球位置指令</div>
+  </div>
+
+  <!-- ============ 第三层：控制流程 ============ -->
+  <div class="section-title">三、控制流程 (主循环 20ms/次)</div>
+
+  <div class="col gap20" style="align-items:flex-start;">
+
+    <!-- 流程步骤 -->
+    <div class="row" style="flex-wrap:wrap; gap:12px; justify-content:center;">
+
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="box" style="width:80px; background:#e8e8e8;">① 按键扫描</div>
+        <span style="font-size:18px; color:#555;">→</span>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="box" style="width:100px; background:#e8e8e8;">② 读红外灰度<br><small>8路数字量</small></div>
+        <span style="font-size:18px; color:#555;">→</span>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="box" style="width:100px; background:#d5e8f8;">③ 循迹PD<br><small>Yaw→PWM_yaw</small></div>
+        <span style="font-size:18px; color:#555;">→</span>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="box" style="width:90px; background:#d5e8f8;">④ S曲线加速<br><small>PWM0计算</small></div>
+        <span style="font-size:18px; color:#555;">→</span>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="box" style="width:115px; background:#d5e8f8;">⑤ 差速限幅<br><small>|yaw|≤PWM0</small></div>
+        <span style="font-size:18px; color:#555;">→</span>
+      </div>
+
+    </div>
+
+    <div class="row" style="flex-wrap:wrap; gap:12px; justify-content:center;">
+
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="box" style="width:115px; background:#d5e8f8;">⑥ 速度环PID<br><small>编码器反馈</small></div>
+        <span style="font-size:18px; color:#555;">→</span>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="box" style="width:115px; background:#d5e8f8;">⑦ 融合输出<br><small>45%+55%</small></div>
+        <span style="font-size:18px; color:#555;">→</span>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="box" style="width:100px; background:#f8d7da;">⑧ 驱动电机<br><small>TB6612</small></div>
+        <span style="font-size:18px; color:#555;">→</span>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:6px;">
+        <div class="box" style="width:100px; background:#e2d5f1;">⑨ 更新OLED<br><small>100ms</small></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ============ 第四层：赛道逻辑 ============ -->
+  <div style="margin-top: 30px;">
+    <div class="section-title">四、赛道起止逻辑</div>
+    <div class="row" style="justify-content:center; gap:30px; flex-wrap:wrap;">
+      <div class="box box-sensor" style="width:180px;">
+        🟢 <b>启动</b><br>按键按下 → motor_enabled=1<br>开始 S 曲线加速<br>计时器归零
+      </div>
+      <span style="font-size:24px;">→</span>
+      <div class="box box-ctrl" style="width:180px;">
+        🔵 <b>巡线行驶</b><br>红外循迹 + 速度PID<br>差速转向控制
+      </div>
+      <span style="font-size:24px;">→</span>
+      <div class="box" style="width:170px;">
+        🟡 <b>离开起跑线</b><br>首次检测到非0x00<br>has_left_start=1
+      </div>
+      <span style="font-size:24px;">→</span>
+      <div class="box box-act" style="width:180px;">
+        🔴 <b>到达终点</b><br>再次检测 0x00<br>→ 停车 + 计时停止<br>OLED 显示最终用时
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 图例 ============ -->
+  <div style="margin-top: 30px; padding-top: 16px; border-top: 1px solid #ddd;">
+    <div class="row" style="gap:24px; flex-wrap:wrap; justify-content:center;">
+      <span><span style="display:inline-block;width:20px;height:14px;background:#fff3cd;border:1px solid #ffc107;vertical-align:middle;"></span> 供电</span>
+      <span><span style="display:inline-block;width:20px;height:14px;background:#d1ecf1;border:1px solid #17a2b8;vertical-align:middle;"></span> MCU</span>
+      <span><span style="display:inline-block;width:20px;height:14px;background:#d4edda;border:1px solid #28a745;vertical-align:middle;"></span> 传感器</span>
+      <span><span style="display:inline-block;width:20px;height:14px;background:#d5e8f8;border:1px solid #0d6efd;vertical-align:middle;"></span> 控制算法</span>
+      <span><span style="display:inline-block;width:20px;height:14px;background:#f8d7da;border:1px solid #dc3545;vertical-align:middle;"></span> 执行器</span>
+      <span><span style="display:inline-block;width:20px;height:14px;background:#e2d5f1;border:1px solid #6f42c1;vertical-align:middle;"></span> 显示</span>
+      <span><span style="display:inline-block;width:20px;height:14px;background:#fff0d5;border:1px solid #fd7e14;vertical-align:middle;"></span> 通信</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
